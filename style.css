@@ -1,0 +1,409 @@
+
+/* =================================
+   SMART STOCK OPTIMIZATION SYSTEM
+   PROFESSIONAL PBL WEBSITE DESIGN
+================================= */
+
+:root {
+    --primary: #2563eb;
+    --dark: #101c36;
+    --sidebar: #0f172a;
+    --background: #f3f6fc;
+    --white: #ffffff;
+    --text: #25324b;
+    --muted: #64748b;
+    --green: #16a34a;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --border: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+/* HEADER */
+
+header {
+    background: var(--dark);
+    color: white;
+    padding: 22px;
+    box-shadow: 0 3px 10px #0002;
+}
+
+header h1 {
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+
+header p {
+    color: #cbd5e1;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 245px;
+    height: 100vh;
+    background: var(--sidebar);
+    padding: 22px 14px;
+    color: white;
+    overflow-y: auto;
+}
+
+.logo {
+    padding: 12px;
+    margin-bottom: 25px;
+}
+
+.logo h2 {
+    color: #60a5fa;
+    font-size: 20px;
+}
+
+.logo p {
+    color: #94a3b8;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+.menu button {
+    width: 100%;
+    padding: 14px;
+    margin: 5px 0;
+    background: transparent;
+    color: #cbd5e1;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu button:hover,
+.menu button.active {
+    background: #253c65;
+    color: white;
+}
+
+/* MAIN CONTENT */
+
+.main {
+    margin-left: 245px;
+    padding: 25px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.topbar p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.profile {
+    background: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+}
+
+/* PAGE SECTIONS */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* DASHBOARD CARDS */
+
+.cards {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(170px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: var(--white);
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000008;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px #00000012;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.card h2 {
+    color: var(--primary);
+    margin-top: 14px;
+    font-size: 26px;
+}
+
+/* PANELS */
+
+.panel {
+    background: var(--white);
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+.panel h3 {
+    margin-bottom: 17px;
+    font-size: 18px;
+}
+
+/* GRID */
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+/* INPUT FIELDS */
+
+input,
+select {
+    width: min(100%, 220px);
+    padding: 12px;
+    margin: 7px 3px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    outline: none;
+    background: white;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #2563eb18;
+}
+
+/* BUTTONS */
+
+.btn {
+    padding: 12px 17px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    margin: 5px 3px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.delete {
+    background: var(--red);
+}
+
+.success {
+    background: var(--green);
+}
+
+/* TABLE */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+th {
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+/* STOCK STATUS */
+
+.status {
+    font-weight: bold;
+}
+
+.low {
+    color: var(--red);
+}
+
+.normal {
+    color: var(--green);
+}
+
+.high {
+    color: var(--orange);
+}
+
+/* ALERT BOX */
+
+.alert {
+    background: #fff7ed;
+    border-left: 4px solid var(--orange);
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 7px;
+    line-height: 1.7;
+}
+
+.result {
+    background: #eff6ff;
+    padding: 17px;
+    margin-top: 15px;
+    border-radius: 8px;
+    line-height: 1.8;
+}
+
+/* CHARTS */
+
+canvas {
+    max-width: 100%;
+    max-height: 300px;
+}
+
+/* TEXT */
+
+.small {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .menu {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .menu button {
+        min-width: 130px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .cards {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 400px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 14px;
+    }
+}
+/* ADD TO THE END OF style.css */
+input[type="range"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+.alert-action-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+/* PRO LEVEL STYLING */
+.supplier-modal-card {
+    background: #ffffff;
+    border-left: 5px solid var(--primary);
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.badge-pro {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}

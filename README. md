@@ -1,0 +1,305 @@
+
+# STOCKWISE
+## Smart Stock Optimization System
+
+STOCKWISE is a Python-based smart inventory management and stock
+optimization project developed for a college Project-Based Learning (PBL)
+submission.
+
+It combines inventory management, demand forecasting, reorder
+optimization and supplier performance analysis.
+
+---
+
+## 1. Project Objective
+
+The main objective of STOCKWISE is to improve inventory decisions
+by helping businesses understand product demand, avoid unnecessary
+stock accumulation and make better purchasing decisions.
+
+---
+
+## 2. Technologies Used
+
+- Python
+- Flask
+- SQLite
+- HTML
+- CSS
+- JavaScript
+- REST API
+- Waitress
+
+---
+
+## 3. Main Features
+
+### 1. Python Demand Forecasting
+
+- Analyses recorded sales.
+- Uses Weighted Moving Average.
+- Applies a limited trend adjustment.
+- Generates a seven-day demand forecast.
+- Calculates a simple forecast error (MAE).
+
+### 2. EOQ and Smart Replenishment
+
+- Calculates Economic Order Quantity.
+- Calculates safety stock.
+- Calculates reorder point.
+- Suggests an order quantity.
+
+### 3. Supplier Performance Intelligence
+
+- Records supplier deliveries.
+- Calculates on-time delivery percentage.
+- Calculates average delivery delay.
+- Calculates average lead time.
+- Generates a transparent prototype score.
+
+---
+
+## 4. Project Folder Structure
+
+STOCKWISE/
+
+    index.html
+    style.css
+    script.js
+
+    app.py
+    wsgi.py
+    requirements.txt
+    README.md
+
+    setup_and_run.bat
+    run_stockwise.bat
+
+    tests/
+        test_api.py
+
+The SQLite database is automatically created as stockwise.db.
+
+---
+
+## 5. System Requirements
+
+- Python 3.10 or later
+- Visual Studio Code (recommended)
+- Windows, macOS or Linux
+- Internet connection for first-time package installation
+
+---
+
+## 6. Installation on Windows
+
+1. Download the STOCKWISE project ZIP.
+2. Extract the ZIP file.
+3. Open the project folder.
+4. Double-click setup_and_run.bat.
+5. Wait for the required packages to install.
+6. The Flask backend will start.
+
+Open your browser and visit:
+
+http://127.0.0.1:5000
+
+Keep the terminal open while using the application.
+
+If Python is not installed, install Python 3.10 or later.
+During Windows installation, select "Add Python to PATH".
+
+---
+
+## 7. Manual Installation Using VS Code
+
+Open the STOCKWISE folder in VS Code.
+
+Open Terminal > New Terminal.
+
+Create a virtual environment:
+
+    py -m venv .venv
+
+Activate the environment:
+
+    .venv\Scripts\activate
+
+Install dependencies:
+
+    py -m pip install -r requirements.txt
+
+Start the backend:
+
+    py app.py
+
+Open the website:
+
+    http://127.0.0.1:5000
+
+Do not open index.html directly for this Python edition.
+Use the Flask server address.
+
+---
+
+## 8. API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | /api/health | Check server status |
+| POST | /api/sales | Record a sale |
+| GET | /api/sales | View sales |
+| POST | /api/demo-sales | Add sample sales |
+| POST | /api/forecast | Generate demand forecast |
+| POST | /api/optimize | Calculate EOQ |
+| POST | /api/deliveries | Record supplier delivery |
+| GET | /api/supplier-scorecard | View supplier performance |
+| GET | /api/data-summary | View database summary |
+
+---
+
+## 9. Example API Requests
+
+### Demand Forecast
+
+POST /api/forecast
+
+JSON:
+
+    {
+      "product_name": "Laptop",
+      "daily_demand": 10
+    }
+
+The system uses recorded sales when available.
+Otherwise, it uses the entered daily demand.
+
+### EOQ Optimizer
+
+POST /api/optimize
+
+JSON:
+
+    {
+      "annual_demand": 1200,
+      "ordering_cost": 100,
+      "unit_cost": 500,
+      "holding_rate": 20,
+      "daily_demand": 4,
+      "lead_time": 5,
+      "daily_std": 2,
+      "z_score": 1.65
+    }
+
+### Add Sales Record
+
+POST /api/sales
+
+JSON:
+
+    {
+      "product_name": "Laptop",
+      "quantity": 5,
+      "sale_date": "2026-11-02"
+    }
+
+### Add Supplier Delivery
+
+POST /api/deliveries
+
+JSON:
+
+    {
+      "supplier_name": "ABC Suppliers",
+      "expected_date": "2026-11-05",
+      "actual_date": "2026-11-06",
+      "lead_time": 4
+    }
+
+---
+
+## 10. Important Mathematical Formulas
+
+### Economic Order Quantity
+
+EOQ = sqrt((2 x D x S) / H)
+
+D = Annual demand
+S = Ordering cost per order
+H = Annual holding cost per unit
+
+### Safety Stock
+
+Safety Stock = Z x Standard Deviation x sqrt(Lead Time)
+
+### Reorder Point
+
+Reorder Point = (Daily Demand x Lead Time) + Safety Stock
+
+### Supplier On-Time Percentage
+
+On-Time Percentage =
+(On-Time Deliveries / Total Deliveries) x 100
+
+### Forecast Error
+
+MAE = Average of absolute forecast errors.
+
+---
+
+## 11. Database
+
+STOCKWISE uses SQLite for storing:
+
+- Sales history
+- Supplier delivery history
+
+Database filename:
+
+    stockwise.db
+
+The database is created automatically when the application starts.
+
+Existing product and inventory information may remain in browser
+Local Storage, depending on the frontend implementation.
+
+---
+
+## 12. Testing
+
+Run the following command after installing the packages:
+
+    py -m unittest discover -s tests -v
+
+---
+
+## 13. Limitations
+
+- This is an academic prototype.
+- It is primarily designed for local demonstration.
+- It does not include user authentication.
+- It is not currently a cloud-based multi-user system.
+- Forecast accuracy depends on the quality and quantity of sales data.
+- Demo sales are simulated records, not actual business transactions.
+
+---
+
+## 14. Future Scope
+
+- Machine-learning-based demand prediction.
+- Cloud database integration.
+- User authentication and role management.
+- Barcode and QR-code scanning.
+- Automated supplier notifications.
+- Real-time stock synchronization.
+- Mobile application integration.
+
+---
+
+## 15. Conclusion
+
+STOCKWISE combines inventory management with Python-based
+forecasting, EOQ optimization and supplier performance analysis.
+
+It aims to support better inventory decisions, reduce avoidable
+stock problems and improve purchasing efficiency.

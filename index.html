@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Stock Optimization System</title>
+<link rel="stylesheet"
+ href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+ --navy:#101c36;
+ --blue:#2563eb;
+ --light:#f3f6fc;
+ --white:#ffffff;
+ --green:#16a34a;
+ --red:#dc2626;
+ --orange:#ea580c;
+ --text:#25324b;
+}
+
+* {
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:Arial,sans-serif;
+}
+
+body {
+ background:var(--light);
+ color:var(--text);
+}
+
+.sidebar {
+ position:fixed;
+ width:245px;
+ height:100vh;
+ background:var(--navy);
+ color:white;
+ padding:22px 14px;
+ overflow-y:auto;
+}
+
+.logo {
+ padding:10px;
+ margin-bottom:25px;
+}
+
+.logo h2 {
+ font-size:19px;
+ color:#93c5fd;
+}
+
+.logo p {
+ color:#94a3b8;
+ font-size:11px;
+ margin-top:7px;
+}
+
+.menu button {
+ width:100%;
+ padding:13px;
+ margin:4px 0;
+ text-align:left;
+ color:#cbd5e1;
+ background:transparent;
+ border:0;
+ border-radius:7px;
+ cursor:pointer;
+ font-size:14px;
+}
+
+.menu button:hover,
+.menu button.active {
+ background:#253c65;
+ color:white;
+}
+
+.main {
+ margin-left:245px;
+ padding:25px;
+}
+
+.topbar {
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:25px;
+ gap:12px;
+}
+
+.topbar p {
+ color:#64748b;
+ font-size:13px;
+ margin-top:6px;
+}
+
+.profile {
+ background:white;
+ padding:10px 15px;
+ border-radius:8px;
+}
+
+.page {display:none;}
+.page.active {display:block;}
+
+.cards {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+ gap:15px;
+ margin-bottom:22px;
+}
+
+.card,.panel {
+ background:white;
+ border-radius:12px;
+ padding:20px;
+ box-shadow:0 2px 12px #00000008;
+}
+
+.card p {
+ font-size:13px;
+ color:#64748b;
+}
+
+.card h2 {
+ margin-top:12px;
+ color:var(--blue);
+ font-size:25px;
+}
+
+.panel {
+ margin-bottom:20px;
+}
+
+.panel h3 {
+ margin-bottom:16px;
+}
+
+.grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+ gap:18px;
+}
+
+input,select {
+ padding:11px;
+ margin:6px 3px;
+ border:1px solid #cbd5e1;
+ border-radius:6px;
+ width:min(100%,220px);
+}
+
+.btn {
+ padding:11px 15px;
+ background:var(--blue);
+ color:white;
+ border:0;
+ border-radius:6px;
+ cursor:pointer;
+ margin:5px 2px;
+}
+
+.btn:hover {opacity:.85;}
+.delete {background:var(--red);}
+.success {background:var(--green);}
+
+.table-wrap {overflow-x:auto;}
+
+table {
+ width:100%;
+ min-width:650px;
+ border-collapse:collapse;
+}
+
+th,td {
+ padding:13px;
+ text-align:left;
+ border-bottom:1px solid #e2e8f0;
+ font-size:13px;
+}
+
+th {background:#eff6ff;}
+
+.status {
+ font-weight:bold;
+}
+
+.low {color:var(--red);}
+.normal {color:var(--green);}
+.high {color:var(--orange);}
+
+.alert {
+ padding:14px;
+ border-left:4px solid var(--orange);
+ background:#fff7ed;
+ margin:10px 0;
+ border-radius:6px;
+ line-height:1.7;
+}
+
+.result {
+ padding:15px;
+ background:#eff6ff;
+ border-radius:8px;
+ margin-top:12px;
+ line-height:1.8;
+}
+
+canvas {max-height:290px;}
+
+.small {
+ color:#64748b;
+ font-size:12px;
+ margin-top:10px;
+}
+
+@media(max-width:800px) {
+ .sidebar {
+  position:relative;
+  width:100%;
+  height:auto;
+ }
+ .menu {
+  display:flex;
+  overflow-x:auto;
+ }
+ .menu button {
+  min-width:135px;
+  text-align:center;
+  font-size:12px;
+ }
+ .main {
+  margin-left:0;
+  padding:14px;
+ }
+ .topbar {
+  align-items:flex-start;
+  flex-direction:column;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+ <div class="logo">
+  <h2>SMART STOCK</h2>
+  <p>OPTIMIZATION & ANALYTICS</p>
+ </div>
+
+ <div class="menu">
+  <button class="active" onclick="openPage('dashboard',this)">▦ Dashboard</button>
+  <button onclick="openPage('inventory',this)">▣ Inventory</button>
+  <button onclick="openPage('analytics',this)">▤ Data Analytics</button>
+  <button onclick="openPage('forecast',this)">◷ Demand Forecast</button>
+  <button onclick="openPage('decision',this)">✦ Decision Support</button>
+  <button onclick="openPage('simulation',this)">⚙ Stock Simulator</button>
+  <button onclick="openPage('reports',this)">▤ Reports</button>
+ </div>
+
+</aside>
+
+<div class="main">
+
+<div class="topbar">
+ <div>
+  <h2 id="pageTitle">Dashboard Overview</h2>
+  <p>Smart Stock Optimization System Using Data Analytics & Decision Support System</p>
+ </div>
+ <div class="profile">Admin Panel</div>
+</div>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+ <div class="cards">
+
+  <div class="card">
+   <p>Total Products</p>
+   <h2 id="total">0</h2>
+  </div>
+
+  <div class="card">
+   <p>Total Stock Units</p>
+   <h2 id="units">0</h2>
+  </div>
+
+  <div class="card">
+   <p>Low Stock Products</p>
+   <h2 id="low">0</h2>
+  </div>
+
+  <div class="card">
+   <p>Total Stock Value</p>
+   <h2 id="value">₹0</h2>
+  </div>
+
+  <div class="card">
+   <p>Inventory Health</p>
+   <h2 id="health">0%</h2>
+  </div>
+
+ </div>
+
+ <div class="grid">
+
+  <div class="panel">
+   <h3>Stock Quantity Analysis</h3>
+   <canvas id="stockChart"></canvas>
+  </div>
+
+  <div class="panel">
+   <h3>Category Distribution</h3>
+   <canvas id="categoryChart"></canvas>
+  </div>
+
+ </div>
+
+ <div class="panel">
+  <h3>System Alerts</h3>
+  <div id="dashboardAlerts"></div>
+ </div>
+
+</section>
+
+<!-- INVENTORY -->
+
+<section id="inventory" class="page">
+
+ <div class="panel">
+
+  <h3>Add New Inventory Product</h3>
+
+  <input id="name" placeholder="Product name">
+  <input id="category" placeholder="Category">
+  <input id="qty" type="number" min="0" placeholder="Stock quantity">
+  <input id="price" type="number" min="0" placeholder="Unit price">
+  <input id="minimum" type="number" min="0" placeholder="Minimum stock">
+  <input id="sales" type="number" min="0" placeholder="Daily demand">
+
+  <button class="btn" onclick="addProduct()">+ Add Product</button>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>Inventory Records</h3>
+
+  <input id="search" placeholder="Search product..." oninput="renderInventory()">
+
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Action</th>
+     </tr>
+    </thead>
+    <tbody id="inventoryList"></tbody>
+   </table>
+  </div>
+
+ </div>
+</section>
+
+<!-- ANALYTICS -->
+
+<section id="analytics" class="page">
+
+ <div class="panel">
+  <h3>Inventory Value Analysis</h3>
+  <canvas id="valueChart"></canvas>
+ </div>
+
+ <div class="panel">
+  <h3>Inventory Performance</h3>
+  <div id="performance"></div>
+ </div>
+
+</section>
+
+<!-- FORECAST -->
+
+<section id="forecast" class="page">
+
+ <div class="panel">
+  <h3>Demand Forecasting</h3>
+  <p class="small">Estimated stock duration based on entered daily demand.</p>
+  <div id="forecastList"></div>
+ </div>
+
+</section>
+
+<!-- DECISION SUPPORT -->
+
+<section id="decision" class="page">
+
+ <div class="panel">
+  <h3>Decision Support Recommendations</h3>
+  <p class="small">Recommendations generated from current stock, minimum stock and daily demand.</p>
+  <div id="decisionList"></div>
+ </div>
+
+ <div class="panel">
+  <h3>Overstock Detection</h3>
+  <div id="overstockList"></div>
+ </div>
+
+</section>
+
+<!-- SIMULATION -->
+
+<!-- SIMULATION -->
+
+<section id="simulation" class="page">
+
+ <div class="panel">
+  <h3>Advanced Stock & Supply Chain Simulator</h3>
+  <p class="small">Test how market demand spikes and supply chain delays impact inventory health in real-time.</p>
+
+  <br>
+  <label>Select Product</label><br>
+  <select id="simProduct" style="width:100%; max-width:300px;"></select>
+
+  <br><br>
+
+  <label>Demand Surge: <span id="demandValue">20</span>%</label><br>
+  <input id="change" type="range" min="-50" max="100" value="20" style="width:100%; max-width:300px;" oninput="document.getElementById('demandValue').innerText=this.value">
+
+  <br><br>
+
+  <label>Supply Chain Delay: <span id="delayValue">5</span> Days</label><br>
+  <input id="delaySlider" type="range" min="0" max="30" value="5" style="width:100%; max-width:300px;" oninput="document.getElementById('delayValue').innerText=this.value">
+
+  <br><br>
+
+  <button class="btn" onclick="simulate()">Run Stress Test</button>
+
+  <div id="simResult" class="result">
+   Simulation results will appear here.
+  </div>
+
+ </div>
+
+</section>
+
+<!-- REPORTS -->
+
+<section id="reports" class="page">
+
+ <div class="panel">
+  <h3>Inventory Summary Report</h3>
+  <div id="report"></div>
+
+  <button class="btn success" onclick="downloadCSV()">Download CSV Report</button>
+ </div>
+
+</section>
+
+</div>
+
+<script>
+
+// SAMPLE DATA
+
+let products = JSON.parse(
+ localStorage.getItem("stockSystem")
+) || [
+ {name:"Laptop",category:"Electronics",qty:5,price:45000,min:10,sales:3},
+ {name:"Mouse",category:"Accessories",qty:35,price:500,min:10,sales:2},
+ {name:"Keyboard",category:"Accessories",qty:4,price:1000,min:8,sales:2},
+ {name:"Monitor",category:"Electronics",qty:20,price:12000,min:5,sales:1},
+ {name:"Printer",category:"Electronics",qty:8,price:8000,min:10,sales:1},
+ {name:"Notebook",category:"Stationery",qty:100,price:50,min:20,sales:5}
+];
+
+let charts={};
+
+const money=n=>"₹"+n.toLocaleString("en-IN");
+
+function escapeHTML(v) {
+ return String(v).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",
+ '"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function save() {
+ localStorage.setItem("stockSystem",JSON.stringify(products));
+}
+
+// NAVIGATION
+
+function openPage(id,button) {
+
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+ document.getElementById(id).classList.add("active");
+
+ document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+
+ button.classList.add("active");
+
+ const titles={
+ dashboard:"Dashboard Overview",
+ inventory:"Inventory Management",
+ analytics:"Data Analytics",
+ forecast:"Demand Forecasting",
+ decision:"Decision Support System",
+ simulation:"Stock Simulation",
+ reports:"Inventory Reports"
+ };
+
+ document.getElementById("pageTitle").innerText=titles[id];
+
+ refresh();
+}
+
+// INVENTORY
+
+function addProduct() {
+
+ let name=document.getElementById("name").value.trim();
+ let category=document.getElementById("category").value.trim();
+
+ let fields=["qty","price","minimum","sales"];
+
+ if(!name || !category || fields.some(id=>document.getElementById(id).value==="")) {
+  alert("Please complete all product details.");
+  return;
+ }
+
+ let [qty,price,min,sales]=fields.map(id=>Number(document.getElementById(id).value));
+
+ if(![qty,price,min,sales].every(Number.isFinite) ||
+ !Number.isInteger(qty) || !Number.isInteger(min) ||
+ !Number.isInteger(sales) || [qty,price,min,sales].some(v=>v<0)) {
+  alert("Enter valid non-negative numbers.");
+  return;
+ }
+
+ products.push({name,category,qty,price,min,sales});
+
+ save();
+ document.querySelectorAll("#inventory input").forEach(i=>i.value="");
+ refresh();
+}
+
+function updateProduct(i) {
+
+ let q=prompt("Enter updated stock quantity:",products[i].qty);
+
+ if(q===null) return;
+
+ if(q.trim()==="" || !Number.isInteger(Number(q)) || Number(q)<0) {
+  alert("Enter a valid quantity.");
+  return;
+ }
+
+ products[i].qty=Number(q);
+ save();
+ refresh();
+}
+
+function deleteProduct(i) {
+
+ if(confirm("Delete this product?")) {
+  products.splice(i,1);
+  save();
+  refresh();
+ }
+}
+
+function renderInventory() {
+
+ let search=document.getElementById("search").value.toLowerCase();
+
+ document.getElementById("inventoryList").innerHTML=
+ products.map((p,i)=>({...p,i}))
+ .filter(p=>(p.name+" "+p.category).toLowerCase().includes(search))
+ .map(p=>`
+ <tr>
+ <td>${escapeHTML(p.name)}</td>
+ <td>${escapeHTML(p.category)}</td>
+ <td>${p.qty}</td>
+ <td>${money(p.price)}</td>
+ <td class="status ${p.qty<=p.min?"low":"normal"}">
+ ${p.qty<=p.min?"Low Stock":"Available"}
+ </td>
+ <td>
+ <button class="btn" onclick="updateProduct(${p.i})">Update</button>
+ <button class="btn delete" onclick="deleteProduct(${p.i})">Delete</button>
+ </td>
+ </tr>
+ `).join("");
+}
+
+// DASHBOARD
+
+function updateDashboard() {
+
+ let units=products.reduce((s,p)=>s+p.qty,0);
+ let value=products.reduce((s,p)=>s+p.qty*p.price,0);
+ let low=products.filter(p=>p.qty<=p.min).length;
+ let health=products.length?
+ Math.round(products.filter(p=>p.qty>p.min).length/products.length*100):0;
+
+ document.getElementById("total").innerText=products.length;
+ document.getElementById("units").innerText=units;
+ document.getElementById("low").innerText=low;
+ document.getElementById("value").innerText=money(value);
+ document.getElementById("health").innerText=health+"%";
+
+ let alerts=products.filter(p=>p.qty<=p.min);
+
+ document.getElementById("dashboardAlerts").innerHTML=
+ alerts.length?
+ alerts.map(p=>`
+ <div class="alert">
+ <b>${escapeHTML(p.name)}</b>: Low stock alert.
+ Available: ${p.qty}, Minimum: ${p.min}
+ </div>`).join(""):"<p>All products are above minimum stock.</p>";
+}
+
+// CHARTS
+
+function drawChart(id,type,labels,data,label) {
+
+ if(charts[id]) charts[id].destroy();
+
+ charts[id]=new Chart(document.getElementById(id),{
+ type,
+ data:{
+ labels,
+ datasets:[{
+ label,
+ data,
+ backgroundColor:[
+ "#2563eb","#16a34a","#f97316",
+ "#8b5cf6","#06b6d4","#ec4899"
+ ],
+ borderWidth:1
+ }]
+ },
+ options:{responsive:true,maintainAspectRatio:true}
+ });
+}
+
+function analytics() {
+
+ let categories={};
+
+ products.forEach(p=>{
+ categories[p.category]=(categories[p.category]||0)+p.qty;
+ });
+
+ drawChart("stockChart","bar",
+ products.map(p=>p.name),
+ products.map(p=>p.qty),"Stock Units");
+
+ drawChart("categoryChart","doughnut",
+ Object.keys(categories),
+ Object.values(categories),"Category Stock");
+
+ drawChart("valueChart","bar",
+ products.map(p=>p.name),
+ products.map(p=>p.qty*p.price),"Stock Value");
+
+ let value=products.reduce((s,p)=>s+p.qty*p.price,0);
+
+ document.getElementById("performance").innerHTML=`
+ <div class="result">
+ Total Inventory Value: ${money(value)}<br>
+ Total Products: ${products.length}<br>
+ Total Stock Units: ${products.reduce((s,p)=>s+p.qty,0)}<br>
+ Low Stock Products: ${products.filter(p=>p.qty<=p.min).length}
+ </div>`;
+}
+
+// FORECASTING
+
+function forecasting() {
+
+ document.getElementById("forecastList").innerHTML=
+ products.map(p=>{
+
+ let days=p.sales>0?(p.qty/p.sales).toFixed(1):"Not available";
+
+ return `
+ <div class="result">
+ <b>${escapeHTML(p.name)}</b><br>
+ Current Stock: ${p.qty}<br>
+ Daily Demand: ${p.sales}<br>
+ Estimated Stock Duration: ${days} days
+ </div>`;
+ }).join("");
+}
+
+// DECISION SUPPORT
+
+function decisions() {
+
+ let output="";
+
+ products.forEach(p=>{
+
+ let reorder=Math.max(0,2*p.min-p.qty);
+
+ if(p.qty<=p.min) {
+
+ output+=`
+ <div class="alert">
+ <b>RESTOCK RECOMMENDATION: ${escapeHTML(p.name)}</b><br>
+ Current Stock: ${p.qty}<br>
+ Minimum Stock: ${p.min}<br>
+ Suggested Purchase: ${reorder} units<br>
+ Reason: Stock has reached or fallen below the minimum level.
+ </div>`;
+
+ } else if(p.qty>p.min*3 && p.min>0) {
+
+ output+=`
+ <div class="result">
+ <b>OVERSTOCK WARNING: ${escapeHTML(p.name)}</b><br>
+ Current stock is more than three times the minimum level.
+ Consider reviewing future purchasing.
+ </div>`;
+ }
+ });
+
+ document.getElementById("decisionList").innerHTML=
+ output||"<p>No immediate purchasing decisions required.</p>";
+
+ let over=products.filter(p=>p.min>0&&p.qty>p.min*3);
+
+ document.getElementById("overstockList").innerHTML=
+ over.map(p=>`
+ <div class="alert">
+ ${escapeHTML(p.name)}: ${p.qty} units currently available.
+ Review future orders to avoid excess stock.
+ </div>`).join("")||"<p>No overstock products detected.</p>";
+}
+
+// SIMULATION
+
+function simulate() {
+
+ let i=Number(document.getElementById("simProduct").value);
+ let change=Number(document.getElementById("change").value);
+
+ if(!products[i] || !Number.isFinite(change) || change < -100) {
+  alert("Enter a valid simulation value.");
+  return;
+ }
+
+ let p=products[i];
+ let demand=p.sales*(1+change/100);
+ let days=demand>0?(p.qty/demand).toFixed(1):"Unlimited";
+
+ document.getElementById("simResult").innerHTML=`
+ <b>Simulation Result</b><br>
+ Product: ${escapeHTML(p.name)}<br>
+ Original Daily Demand: ${p.sales}<br>
+ Changed Daily Demand: ${demand.toFixed(2)}<br>
+ Estimated Stock Duration: ${days} days<br>
+ Recommendation: ${demand>0&&p.qty/demand<7?
+ "Consider preparing a restocking plan.":
+ "Current stock may be sufficient for the estimated period."}
+ `;
+}
+
+// REPORTS
+
+function reports() {
+
+ let total=products.reduce((s,p)=>s+p.qty*p.price,0);
+
+ document.getElementById("report").innerHTML=`
+ Total Products: ${products.length}<br><br>
+ Total Stock Units: ${products.reduce((s,p)=>s+p.qty,0)}<br><br>
+ Low Stock: ${products.filter(p=>p.qty<=p.min).length}<br><br>
+ Inventory Value: ${money(total)}
+ `;
+}
+
+function downloadCSV() {
+
+ let rows=[
+ ["Product","Category","Quantity","Price","Minimum Stock","Daily Demand"],
+ ...products.map(p=>[p.name,p.category,p.qty,p.price,p.min,p.sales])
+ ];
+
+ let csv=rows.map(row=>row.map(v=>
+ '"'+String(v).replace(/"/g,'""')+'"'
+ ).join(",")).join("\n");
+
+ let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;
+ a.download="Smart_Stock_Report.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+// REFRESH
+
+function refresh() {
+
+ renderInventory();
+ updateDashboard();
+ forecasting();
+ decisions();
+ reports();
+
+ document.getElementById("simProduct").innerHTML=
+ products.map((p,i)=>
+ `<option value="${i}">${escapeHTML(p.name)}</option>`
+ ).join("");
+
+ analytics();
+}
+
+refresh();
+
+</script>
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</body>
+</html>
